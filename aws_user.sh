@@ -16,9 +16,7 @@
 #   2. Configure AWS Profile:
 #   	- run aws configure
 #   3. Ensure script is executable: chmod +x aws_user.sh
-#
-#
-# Usage: 
+# Usage:
 #   ./aws_user.sh [-n] [-g] [-p]
 
 
