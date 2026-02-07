@@ -19,7 +19,7 @@
 #
 #
 # Usage: 
-#   ./aws_user.sh [--name] [--password] [--groups]
+#   ./aws_user.sh [-n] [-g] [-p]
 
 
 
