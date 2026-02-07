@@ -16,8 +16,10 @@
 #   2. Configure AWS Profile:
 #   	- run aws configure
 #   3. Ensure script is executable: chmod +x aws_user.sh
-# Usage:
-#   ./aws_user.sh [-n] [-g] [-p]
+#
+#
+# Usage: 
+#   ./aws_user.sh [--name] [--password] [--groups]
 
 
 
@@ -92,7 +94,7 @@ EOF
 	    aws iam create-login-profile \
 		    --user-name "$username" \
 		    --password "$password" \
-		    --password-reset-required  >/dev/null 2>&1
+		    --password-reset-required
     }
 
 
@@ -108,7 +110,14 @@ EOF
 	      >/dev/null 2>&1
 	} 
 
+##### die function
 
+
+	die() {
+
+	  echo "Error : $*" >&2
+          exit 1
+} 
 
 ##### Main logic
 
@@ -185,15 +194,20 @@ EOF
 
    if login_profile_exists "$username"; then
 	
-	aws iam update-login-profile \
+     if aws iam update-login-profile \
 		--user-name "$username" \
 		--password "$password" \
-		--password-restet-required >/dev/null 2>&1
-	else
+		--password-restet-required; then
+	die "Failed to update login Profile for $username."
+     fi
    
-   	  set_console_password "$username" "$password"
-
+    else
+   	if ! set_console_password "$username" "$password"; then
+           die "Failed to create login profile for $username."
+	fi
     fi
+
+    
 
    add_user_to_group "$username" "$group"
 
